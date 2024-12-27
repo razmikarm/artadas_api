@@ -6,9 +6,11 @@ DATABASE_URL = "sqlite:///./test.db"
 # Create database engine
 engine = create_engine(DATABASE_URL)
 
+
 # Initialize the database
 def init_db():
     SQLModel.metadata.create_all(engine)
+
 
 # Dependency to get a database session
 def get_session():

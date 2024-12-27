@@ -1,0 +1,10 @@
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "venv",
+]
+
+# Same as Black.
+line-length = 90
+indent-width = 4
+
+# More configurations here: https://docs.astral.sh/ruff/configuration/

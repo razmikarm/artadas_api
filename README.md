@@ -23,6 +23,7 @@ API server for Artadas project
 
 3. Install dependencies:
    ```bash
+   pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
@@ -38,6 +39,25 @@ API server for Artadas project
 
 ---
 
+### Linter
+
+1. Run to check code formatting:
+
+```bash
+ruff check
+```
+
+2. Run to resolve fixable errors:
+```bash
+ruff check --fix
+```
+
+3. Run to reformat code:
+```bash
+ruff format
+```
+
+---
 ## Testing
 1. Install testing dependencies:
    ```bash
