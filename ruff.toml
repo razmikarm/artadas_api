@@ -4,7 +4,7 @@ exclude = [
 ]
 
 # Same as Black.
-line-length = 90
+line-length = 120
 indent-width = 4
 
 # More configurations here: https://docs.astral.sh/ruff/configuration/
