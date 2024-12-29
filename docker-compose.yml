@@ -2,10 +2,8 @@ services:
   db:
     image: postgres
     container_name: postgres
-    environment:
-      POSTGRES_USER: artadas_db_user
-      POSTGRES_PASSWORD: artadas_db_password
-      POSTGRES_DB: artadas_db
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Persists DB data
     ports:

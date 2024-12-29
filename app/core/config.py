@@ -4,17 +4,20 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     app_name: str
-    db_user: str
-    db_password: str
-    db_host: str
-    db_port: str
-    db_name: str
+    postgres_user: str
+    postgres_password: str
+    postgres_host: str
+    postgres_port: str
+    postgres_db: str
     debug: bool = False
 
     @property
     def database_url(self) -> str:
-        return f"postgresql://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
-    
+        return (
+            f"postgresql://{self.postgres_user}:{self.postgres_password}"
+            f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        )
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
