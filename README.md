@@ -8,27 +8,29 @@ API server for Artadas project
 - Python 3.12+
 - pip
 
-### Installation
+### Intialization
 1. Clone the repository:
    ```bash
    git clone git@github.com:razmikarm/artadas_api.git
    cd artadas_api
    ```
+2. Rename `.env.example` to `.env` and fill real data 
 
-2. Create a virtual environment:
+### Local Installation and Run
+
+1. Create a virtual environment:
    ```bash
    python -m venv venv
    source venv/bin/activate
    ```
 
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-### Run the Application
-1. Start the server:
+3. Start the server:
    ```bash
    uvicorn app.main:app --reload
    ```
@@ -37,6 +39,22 @@ API server for Artadas project
    - Swagger UI: `http://127.0.0.1:8000/docs`
    - ReDoc: `http://127.0.0.1:8000/redoc`
 
+### Run with Docker
+
+1. Install Docker in your system
+2. Install the [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository) plugin
+
+3. Build your containers:
+```bash
+docker compose build
+```
+
+4. Run containers:
+```bash
+docker compose up
+```
+
+ > The project will be mounted in container, so that container will be up-to-date and will reload on new changes
 ---
 
 ### Linter

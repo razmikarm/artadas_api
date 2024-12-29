@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from datetime import datetime, UTC
 
 from pydantic import ConfigDict
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, func
 
 
 PositiveInt = Annotated[int, Field(gt=-1)]
@@ -31,12 +31,12 @@ class Topic(TopicBase, table=True):
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
         nullable=False,
-        sa_column_kwargs={"server_default": "CURRENT_TIMESTAMP"},
+        sa_column_kwargs={"server_default": func.current_timestamp()},
     )
     last_updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
         nullable=False,
-        sa_column_kwargs={"server_default": "CURRENT_TIMESTAMP"},
+        sa_column_kwargs={"server_default": func.current_timestamp()},
     )
 
     courses: list["Course"] = Relationship(back_populates="topics", link_model=Syllabus)

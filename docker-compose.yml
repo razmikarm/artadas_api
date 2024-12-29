@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: artadas_db_user
+      POSTGRES_PASSWORD: artadas_db_password
+      POSTGRES_DB: artadas_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persists DB data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  app:
+    build: .
+    container_name: artadas_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app  # Mount the local directory to the container's /app directory
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge

@@ -3,11 +3,11 @@ from typing import Annotated
 
 from sqlmodel import SQLModel, Session, create_engine
 
-# Database URL
-DATABASE_URL = "sqlite:///./test.db"
+from app.core.config import settings
+
 
 # Create database engine
-engine = create_engine(DATABASE_URL)
+engine = create_engine(settings.database_url)
 
 
 # Initialize the database
