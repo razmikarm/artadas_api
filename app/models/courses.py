@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, TYPE_CHECKING
 from uuid import UUID, uuid4
 from datetime import datetime, UTC
 
@@ -6,6 +6,12 @@ from pydantic import ConfigDict
 from sqlmodel import SQLModel, Field, Relationship, func
 from app.models.topics import Syllabus
 
+
+# Import only for type checking
+# Avoids forward references
+if TYPE_CHECKING:
+    from app.models.topics import Topic
+    from app.models.users import User
 
 PositiveInt = Annotated[int, Field(gt=-1)]
 

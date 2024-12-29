@@ -1,5 +1,13 @@
+from typing import TYPE_CHECKING
+
 from uuid import UUID, uuid4
 from sqlmodel import SQLModel, Field, Relationship
+
+
+# Import only for type checking
+# Avoids forward references
+if TYPE_CHECKING:
+    from app.models.courses import Course
 
 
 class UserBase(SQLModel):

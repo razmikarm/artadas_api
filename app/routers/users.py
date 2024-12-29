@@ -33,7 +33,7 @@ def read_user(user_id: UUID, session: DBSession):
 
 
 @router.get("/{user_id}/courses", response_model=list[CourseReadList])
-def read_user(user_id: UUID, session: DBSession):
+def read_user_courses(user_id: UUID, session: DBSession):
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
