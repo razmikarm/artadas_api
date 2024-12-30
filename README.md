@@ -2,18 +2,22 @@
 
 API server for Artadas project
 
+
 ## Setup Instructions
 
 ### Prerequisites
+
 - Python 3.12+
 - pip
 
-### Intialization
+### Initialization
+
 1. Clone the repository:
    ```bash
    git clone git@github.com:razmikarm/artadas_api.git
    cd artadas_api
    ```
+
 2. Rename `.env.example` to `.env` and fill real data 
 
 ### Local Installation and Run
@@ -34,53 +38,78 @@ API server for Artadas project
    ```bash
    uvicorn app.main:app --reload
    ```
-2. Access the API at `http://127.0.0.1:8000`.
-3. View the interactive API docs:
-   - Swagger UI: `http://127.0.0.1:8000/docs`
-   - ReDoc: `http://127.0.0.1:8000/redoc`
+
+4. Access the API at [127.0.0.1:8000](http://127.0.0.1:8000).
+
+5. View the interactive API docs:
+   - Swagger UI: [127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+   - ReDoc: [127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+
 
 ### Run with Docker
 
 1. Install Docker in your system
+
 2. Install the [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository) plugin
 
 3. Build your containers:
-```bash
-docker compose build
-```
+   ```bash
+   docker compose build
+   ```
 
 4. Run containers:
-```bash
-docker compose up
-```
+   ```bash
+   docker compose up
+   ```
 
- > The project will be mounted in container, so that container will be up-to-date and will reload on new changes
----
+5. Access the API at [0.0.0.0:8000](http://0.0.0.0:8000).
 
-### Linter
+6. View the interactive API docs:
+   - Swagger UI: [0.0.0.0:8000/docs](http://0.0.0.0:8000/docs)
+   - ReDoc: [0.0.0.0:8000/redoc](http://0.0.0.0:8000/redoc)
 
-1. Run to check code formatting:
+> The project will be mounted in container, so that container will be up-to-date and will reload on new changes
 
-```bash
-ruff check
-```
+
+## Development
+
+### Add pre-commits
+
+1. Install Pre-Commit Hooks:
+   ```bash
+   pre-commit install
+   ```
+
+2. Check if it's working:
+   ```bash
+   pre-commit run --all-files
+   ```
+
+### Check code manually
+
+1. Run to check with linter:
+   ```bash
+   ruff check
+   ```
 
 2. Run to resolve fixable errors:
-```bash
-ruff check --fix
-```
+   ```bash
+   ruff check --fix
+   ```
 
 3. Run to reformat code:
-```bash
-ruff format
-```
+   ```bash
+   ruff format
+   ```
 
----
+
 ## Testing
+
 1. Install testing dependencies:
    ```bash
    pip install pytest pytest-asyncio
    ```
+
 2. Run tests:
    ```bash
    pytest
@@ -88,7 +117,7 @@ ruff format
 
 ---
 
-## Future Enhancements
+### Future Enhancements
 - Add authentication using OAuth2 or JWT.
 - Integrate Alembic for database migrations.
 - Deploy to a cloud provider like AWS, GCP, or Heroku.
