@@ -4,8 +4,9 @@ from sqlmodel import select
 from app.db.database import DBSession
 from app.models.users import User, UserCreate, UserRead
 from app.models.courses import CourseReadList
+from app.models.topics import TopicReadList
 
-router = APIRouter()
+router = APIRouter(prefix="/users")
 
 
 @router.get("/", response_model=list[UserRead])
@@ -38,3 +39,11 @@ def read_user_courses(user_id: UUID, session: DBSession):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user.courses
+
+
+@router.get("/{user_id}/topics", response_model=list[TopicReadList])
+def read_user_topics(user_id: UUID, session: DBSession):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user.topics

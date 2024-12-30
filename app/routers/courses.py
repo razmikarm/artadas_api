@@ -10,7 +10,7 @@ from app.models.users import User
 from app.models.topics import TopicReadList, Topic, Syllabus
 from app.models.courses import CourseCreate, Course, CourseReadSingle, CourseUpdate, CourseReadList
 
-router = APIRouter()
+router = APIRouter(prefix="/courses")
 
 
 @router.get("/", response_model=list[CourseReadList])
