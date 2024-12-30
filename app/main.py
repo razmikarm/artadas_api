@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.db.database import init_db
+from app.utils.migrations import apply_migrations
 from app.routers import users, courses, topics
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Perform any startup logic here
-    init_db()  # Initialize the database
+    apply_migrations()  # Apply migrations when the app starts
     yield  # Control returns to the application during runtime
     # Perform any shutdown logic here if needed
 

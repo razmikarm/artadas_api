@@ -102,6 +102,18 @@ API server for Artadas project
    ruff format
    ```
 
+### Manage migrations
+
+1. Generate new revision:
+   ```bash
+   alembic revision --autogenerate -m "Your migration message"
+   ```
+
+2. Upgrade Database with new revision:
+   ```bash
+   alembic upgrade head
+   ```
+
 
 ## Testing
 
