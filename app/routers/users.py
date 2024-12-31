@@ -1,7 +1,9 @@
 from uuid import UUID
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
+
 from app.db.database import DBSession
+from app.utils.auth import hash_password
 from app.models.users import User, UserCreate, UserRead
 from app.models.courses import CourseReadList
 from app.models.topics import TopicReadList
@@ -18,7 +20,13 @@ def read_users(session: DBSession):
 
 @router.post("/", response_model=UserRead)
 def create_user(user: UserCreate, session: DBSession):
-    db_user = User.model_validate(user)  # Convert UserCreate to User
+    hashed_pwd = hash_password(user.password)
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        hashed_password=hashed_pwd,
+        full_name=user.full_name,
+    )
     session.add(db_user)
     session.commit()
     session.refresh(db_user)

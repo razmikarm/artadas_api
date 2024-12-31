@@ -2,13 +2,18 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str
+    app_name: str = "Artadas API"
+    debug: bool = False
+
     postgres_user: str
     postgres_password: str
     postgres_host: str
     postgres_port: str
     postgres_db: str
-    debug: bool = False
+
+    secret_key: str
+    algorithm: str = "HS256"
+    access_token_timeout: int
 
     @property
     def database_url(self) -> str:
