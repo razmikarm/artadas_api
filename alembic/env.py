@@ -10,6 +10,7 @@ from sqlmodel import SQLModel
 from app.models.courses import Course
 from app.models.users import User
 from app.models.topics import Topic, Syllabus
+from app.models.auth import RefreshToken
 
 
 # Load environment variables from .env file

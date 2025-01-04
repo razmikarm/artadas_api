@@ -30,7 +30,6 @@ mdurl==0.1.2
 nodeenv==1.9.1
 orjson==3.10.12
 packaging==24.2
-passlib==1.7.4
 platformdirs==4.3.6
 pluggy==1.5.0
 pre_commit==4.0.1

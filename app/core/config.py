@@ -12,8 +12,10 @@ class Settings(BaseSettings):
     postgres_db: str
 
     secret_key: str
-    algorithm: str = "HS256"
     access_token_timeout: int
+    refresh_token_secret: str
+    refresh_token_timeout: int
+    algorithm: str = "HS256"
 
     @property
     def database_url(self) -> str:

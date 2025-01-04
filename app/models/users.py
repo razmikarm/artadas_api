@@ -9,8 +9,9 @@ from sqlmodel import SQLModel, Field, Relationship, func
 # Import only for type checking
 # Avoids forward references
 if TYPE_CHECKING:
-    from app.models.courses import Course
     from app.models.topics import Topic
+    from app.models.courses import Course
+    from app.models.auth import RefreshToken
 
 
 class UserBase(SQLModel):
@@ -25,18 +26,19 @@ class User(UserBase, table=True):
     is_active: bool = Field(default=False)
     is_admin: bool = Field(default=False)
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
     last_updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
 
     topics: list["Topic"] = Relationship(back_populates="creator")
     courses: list["Course"] = Relationship(back_populates="creator")
+    refresh_tokens: list["RefreshToken"] = Relationship(back_populates="user")
 
 
 class UserCreate(SQLModel):

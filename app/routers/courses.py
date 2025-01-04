@@ -77,7 +77,7 @@ def update_course(course_id: UUID, course_update: CourseUpdate, session: DBSessi
     for key, value in course_data.items():
         setattr(db_course, key, value)
 
-    db_course.last_updated_at = datetime.now(UTC)
+    db_course.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
     session.add(db_course)
     session.commit()
     session.refresh(db_course)

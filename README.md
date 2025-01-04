@@ -114,6 +114,18 @@ API server for Artadas project
    alembic upgrade head
    ```
 
+### Clean container dev database
+
+1. Remove existing containers
+   ```bash
+   docker compose up
+   ```
+
+2. Remove database volume
+   ```bash
+   docker volume rm artadas_api_postgres_data
+   ```
+
 
 ## Testing
 

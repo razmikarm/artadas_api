@@ -31,19 +31,19 @@ class Course(CourseBase, table=True):
     """Database model for Courses."""
 
     id: UUID = Field(default_factory=uuid4, primary_key=True, index=True, nullable=False)
+    creator_id: UUID = Field(foreign_key="user.id")
     tg_group_id: str | None = None
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
     last_updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
 
-    creator_id: UUID = Field(foreign_key="user.id")
     creator: "User" = Relationship(back_populates="courses")
     topics: list["Topic"] = Relationship(back_populates="courses", link_model=Syllabus)
 
