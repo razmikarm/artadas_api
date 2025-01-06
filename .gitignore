@@ -1,3 +1,6 @@
+# Manually set
+docker/init-scripts/02_init-auth-db.sql
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
