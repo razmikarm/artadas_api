@@ -122,15 +122,15 @@ API server for Artadas project
 
 ### Update submodule (`auth`)
 
-1. Update sumbodule to the latest commit
-   ```bash
-   git submodule update --remote
-   ```
-
-2. If main repository detects that the submodule's commit reference has changed
+1. When main repository detects that the submodule's commit reference has changed
    ```bash
    git add auth
    git commit -m "Updated Auth to the latest version"
+   ```
+
+2. Update sumbodule to the latest commit that repository references
+   ```bash
+   git submodule update --remote
    ```
 
 
