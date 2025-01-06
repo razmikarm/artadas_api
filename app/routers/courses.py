@@ -33,6 +33,22 @@ def create_course(course: CourseCreate, session: DBSession) -> CourseReadSingle:
     return db_course
 
 
+@router.delete("/{course_id}", response_model=dict)
+def delete_course(course_id: UUID, session: DBSession) -> dict:
+    # Try to find the course
+    course = session.exec(select(Course).where(Course.id == course_id)).first()
+
+    if course is None:
+        # Raise an exception if the course doesn't exist
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+
+    # Delete the Course
+    session.delete(course)
+    session.commit()
+
+    return {"message": f"Course with ID {course_id} has been deleted"}
+
+
 @router.get("/{course_id}", response_model=CourseReadSingle)
 def read_course(course_id: UUID, session: DBSession) -> CourseReadSingle:
     course = session.get(Course, course_id)

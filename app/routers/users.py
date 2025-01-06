@@ -38,6 +38,22 @@ def create_user(user: UserCreate, session: DBSession) -> UserRead:
     return db_user
 
 
+@router.delete("/{user_id}", response_model=dict)
+def delete_user(user_id: UUID, session: DBSession) -> dict:
+    # Try to find the user
+    user = session.exec(select(User).where(User.id == user_id)).first()
+
+    if user is None:
+        # Raise an exception if the user doesn't exist
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    # Delete the user
+    session.delete(user)
+    session.commit()
+
+    return {"message": f"User with ID {user_id} has been deleted"}
+
+
 @router.get("/{user_id}", response_model=UserRead)
 def read_user(user_id: UUID, session: DBSession):
     user = session.get(User, user_id)

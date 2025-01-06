@@ -55,3 +55,19 @@ def update_topic(topic_id: UUID, topic_update: TopicUpdate, session: DBSession) 
     session.commit()
     session.refresh(db_topic)
     return db_topic
+
+
+@router.delete("/{topic_id}", response_model=dict)
+def delete_topic(topic_id: UUID, session: DBSession) -> dict:
+    # Try to find the topic
+    topic = session.exec(select(Topic).where(Topic.id == topic_id)).first()
+
+    if topic is None:
+        # Raise an exception if the topic doesn't exist
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
+
+    # Delete the topic
+    session.delete(topic)
+    session.commit()
+
+    return {"message": f"Topic with ID {topic_id} has been deleted"}
