@@ -14,7 +14,7 @@ API server for Artadas project
 
 1. Clone the repository:
    ```bash
-   git clone git@github.com:razmikarm/artadas_api.git
+   git clone --recurse-submodules git@github.com:razmikarm/artadas_api.git
    cd artadas_api
    ```
 

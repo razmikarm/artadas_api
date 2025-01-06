@@ -1,0 +1,3 @@
+[submodule "auth"]
+	path = auth
+	url = git@github.com:razmikarm/artadas_auth.git

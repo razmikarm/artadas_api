@@ -18,7 +18,7 @@ ACCESS_TOKEN_TIMEOUT = settings.access_token_timeout
 REFRESH_TOKEN_TIMEOUT = settings.refresh_token_timeout
 REFRESH_TOKEN_SECRET = settings.refresh_token_secret
 
-oauth2_scheme = Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl="auth/token"))]
+oauth2_scheme = Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl="auth/login"))]
 
 
 def hash_refresh_token(token: str) -> str:

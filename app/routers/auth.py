@@ -12,8 +12,15 @@ router = APIRouter(prefix="/auth")
 OAuthForm = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
-@router.post("/token", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/login", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 def login(form_data: OAuthForm, session: DBSession) -> TokenResponse:
+    user = authenticate_user(session, form_data.username, form_data.password)
+    token_response = generate_tokens(user, session)
+    return token_response
+
+
+@router.post("/logout", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+def logout(form_data: OAuthForm, session: DBSession) -> TokenResponse:
     user = authenticate_user(session, form_data.username, form_data.password)
     token_response = generate_tokens(user, session)
     return token_response
