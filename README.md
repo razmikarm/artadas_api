@@ -8,7 +8,8 @@ API server for Artadas project
 ### Prerequisites
 
 - Python 3.12+
-- pip
+- Docker
+- [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository) plugin
 
 ### Initialization
 
@@ -48,27 +49,30 @@ API server for Artadas project
 
 ### Run with Docker
 
-1. Install Docker in your system
+> Before running any docker command navigate to `docker` directory
 
-2. Install the [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository) plugin
+1. Navigate to `docker` directory
+   ```bash
+   cd docker
+   ```
 
-3. Build your containers:
+2. Build your containers:
    ```bash
    docker compose build
    ```
 
-4. Run containers:
+3. Run containers:
    ```bash
    docker compose up
    ```
 
-5. Access the API at [0.0.0.0:8000](http://0.0.0.0:8000).
+4. Access the API at [0.0.0.0:8000](http://0.0.0.0:8000).
 
-6. View the interactive API docs:
+5. View the interactive API docs:
    - Swagger UI: [0.0.0.0:8000/docs](http://0.0.0.0:8000/docs)
    - ReDoc: [0.0.0.0:8000/redoc](http://0.0.0.0:8000/redoc)
 
-> The project will be mounted in container, so that container will be up-to-date and will reload on new changes
+> The project will be mounted in container and will reload on new changes
 
 
 ## Development
@@ -103,6 +107,8 @@ API server for Artadas project
    ```
 
 ### Manage migrations
+
+> To only start database service, run `docker compose up db` 
 
 1. Generate new revision:
    ```bash
