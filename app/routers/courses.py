@@ -46,7 +46,7 @@ def delete_course(course_id: UUID, session: DBSession) -> dict:
     session.delete(course)
     session.commit()
 
-    return {"message": f"Course with ID {course_id} has been deleted"}
+    return {"message": "Course has been deleted"}
 
 
 @router.get("/{course_id}", response_model=CourseReadSingle)

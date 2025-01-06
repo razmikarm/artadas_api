@@ -51,7 +51,7 @@ def delete_user(user_id: UUID, session: DBSession) -> dict:
     session.delete(user)
     session.commit()
 
-    return {"message": f"User with ID {user_id} has been deleted"}
+    return {"message": "User has been deleted"}
 
 
 @router.get("/{user_id}", response_model=UserRead)

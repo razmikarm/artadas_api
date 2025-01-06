@@ -70,4 +70,4 @@ def delete_topic(topic_id: UUID, session: DBSession) -> dict:
     session.delete(topic)
     session.commit()
 
-    return {"message": f"Topic with ID {topic_id} has been deleted"}
+    return {"message": "Topic has been deleted"}
