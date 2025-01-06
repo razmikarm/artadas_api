@@ -114,16 +114,35 @@ API server for Artadas project
    alembic upgrade head
    ```
 
+### Update submodule (`auth`)
+
+1. Update sumbodule to the latest commit
+   ```bash
+   git submodule update --remote
+   ```
+
+2. If main repository detects that the submodule's commit reference has changed
+   ```bash
+   git add auth
+   git commit -m "Updated Auth to the latest version"
+   ```
+
+
 ### Clean container dev database
 
 1. Remove existing containers
    ```bash
-   docker compose up
+   docker compose down
    ```
 
 2. Remove database volume
    ```bash
    docker volume rm artadas_api_postgres_data
+   ```
+
+3. Or delete volumes with one command:
+   ```bash
+   docker-compose down -v
    ```
 
 
