@@ -10,7 +10,6 @@ from sqlmodel import SQLModel, Field, Relationship, func
 # Avoids forward references
 if TYPE_CHECKING:
     from app.models.courses import Course
-    from app.models.users import User
 
 PositiveInt = Annotated[int, Field(gt=-1)]
 
@@ -35,7 +34,7 @@ class Topic(TopicBase, table=True):
     """Database model for Topics."""
 
     id: UUID = Field(default_factory=uuid4, primary_key=True, index=True, nullable=False)
-    creator_id: UUID = Field(foreign_key="user.id")
+    creator_id: UUID = Field()  # foreign_key="user.id"
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
@@ -47,7 +46,6 @@ class Topic(TopicBase, table=True):
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
 
-    creator: "User" = Relationship(back_populates="topics")
     courses: list["Course"] = Relationship(back_populates="topics", link_model=Syllabus)
 
 

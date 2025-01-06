@@ -1,27 +1,29 @@
 services:
   db:
     image: postgres
-    container_name: postgres
+    container_name: artadas_db
     env_file:
       - ../.env
       - ../auth/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data  # Persists DB data
-      - ./init-auth-db.sh:/docker-entrypoint-initdb.d/init-auth-db.sh:ro
+      - ./init-scripts:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
     networks:
       - backend
 
   api:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: artadas_api
     ports:
       - "8000:8000"
     depends_on:
       - db
     volumes:
-      - ../app:/app/app  # Mount the local directory to the container's /app directory
+      - ..:/app  # Mount the local directory to the container's /app directory
     networks:
       - backend
 
@@ -35,7 +37,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ../auth/app:/app/app
+      - ../auth:/app
     networks:
       - backend
 

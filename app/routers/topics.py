@@ -5,7 +5,6 @@ from datetime import datetime, UTC
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 from app.db.database import DBSession
-from app.models.users import User
 from app.models.topics import TopicCreate, Topic, TopicReadSingle, TopicUpdate, TopicReadList
 
 router = APIRouter(prefix="/topics")
@@ -20,9 +19,9 @@ def list_topics(session: DBSession, offset: int = 0, limit: int = 100) -> list[T
 @router.post("/", response_model=TopicReadSingle, status_code=status.HTTP_201_CREATED)
 def create_topic(topic: TopicCreate, session: DBSession) -> TopicReadSingle:
     # Check if user exists
-    user = session.get(User, topic.creator_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    # user = session.get(User, topic.creator_id)
+    # if not user:
+    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     db_topic = Topic.model_validate(topic)
     session.add(db_topic)
@@ -55,3 +54,9 @@ def update_topic(topic_id: UUID, topic_update: TopicUpdate, session: DBSession) 
     session.commit()
     session.refresh(db_topic)
     return db_topic
+
+
+@router.get("/{user_id}/topics", response_model=list[TopicReadList])
+def read_user_topics(user_id: UUID, session: DBSession):
+    user_courses = session.exec(select(Topic).where(Topic.creator_id == user_id)).all()
+    return user_courses

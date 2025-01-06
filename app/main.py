@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.utils.migrations import apply_migrations
-from app.routers import auth, users, courses, topics
+from app.routers import courses, topics
 
 
 @asynccontextmanager
@@ -14,7 +14,5 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(auth.router, tags=["Auth"])
-app.include_router(users.router, tags=["Users"])
 app.include_router(courses.router, tags=["Courses"])
 app.include_router(topics.router, tags=["Topics"])

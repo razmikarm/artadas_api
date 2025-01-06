@@ -6,7 +6,6 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 from sqlalchemy import func
 from app.db.database import DBSession
-from app.models.users import User
 from app.models.topics import TopicReadList, Topic, Syllabus
 from app.models.courses import CourseCreate, Course, CourseReadSingle, CourseUpdate, CourseReadList
 
@@ -22,9 +21,9 @@ def list_courses(session: DBSession, offset: int = 0, limit: int = 100) -> list[
 @router.post("/", response_model=CourseReadSingle, status_code=status.HTTP_201_CREATED)
 def create_course(course: CourseCreate, session: DBSession) -> CourseReadSingle:
     # Check if user exists
-    user = session.get(User, course.creator_id)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    # user = session.get(User, course.creator_id)
+    # if not user:
+    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     db_course = Course.model_validate(course)
     session.add(db_course)
@@ -82,3 +81,9 @@ def update_course(course_id: UUID, course_update: CourseUpdate, session: DBSessi
     session.commit()
     session.refresh(db_course)
     return db_course
+
+
+@router.get("/{user_id}/courses", response_model=list[CourseReadList])
+def read_user_courses(user_id: UUID, session: DBSession):
+    user_courses = session.exec(select(Course).where(Course.creator_id == user_id)).all()
+    return user_courses
