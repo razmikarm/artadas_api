@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     postgres_port: str
     postgres_db: str
 
+    auth_base_url: str
+
     @property
     def database_url(self) -> str:
         return (
