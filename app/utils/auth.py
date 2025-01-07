@@ -111,6 +111,8 @@ def get_db_refresh_token(token: str, session: Session) -> RefreshToken:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Refresh token not found")
     if db_refresh_token.expires_at < datetime.now(UTC).replace(tzinfo=None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Refresh token is expired")
+    if db_refresh_token.is_revoked:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Refresh token is revoked")
     return db_refresh_token
 
 
