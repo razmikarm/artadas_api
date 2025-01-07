@@ -23,12 +23,11 @@ def authenticate(request: Request) -> User:
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authorization header missing")
-    scheme, _, token = auth_header.partition(" ")
-    if scheme.lower() != "bearer":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid scheme")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid scheme")
 
+    token = auth_header.split(" ", 1)[1]
     response = requests.post(TOKEN_VERIFY_URL, json={"token": token})
-    # Ensure the request was successful
     if response.status_code == status.HTTP_200_OK:
         try:
             user_data = response.json()
