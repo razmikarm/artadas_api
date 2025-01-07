@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 from app.db.database import DBSession
 from app.models.topics import TopicCreate, Topic, TopicReadSingle, TopicUpdate, TopicReadList
+from app.utils.auth import CurrentUser
 
 router = APIRouter(prefix="/topics")
 
@@ -17,13 +18,8 @@ def list_topics(session: DBSession, offset: int = 0, limit: int = 100) -> list[T
 
 
 @router.post("/", response_model=TopicReadSingle, status_code=status.HTTP_201_CREATED)
-def create_topic(topic: TopicCreate, session: DBSession) -> TopicReadSingle:
-    # Check if user exists
-    # user = session.get(User, topic.creator_id)
-    # if not user:
-    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
-    db_topic = Topic.model_validate(topic)
+def create_topic(user: CurrentUser, topic: TopicCreate, session: DBSession) -> TopicReadSingle:
+    db_topic = Topic.model_validate(topic, update={"creator_id": user.id})
     session.add(db_topic)
     session.commit()
     session.refresh(db_topic)
@@ -39,21 +35,33 @@ def read_topic(topic_id: UUID, session: DBSession) -> TopicReadSingle:
 
 
 @router.patch("/{topic_id}", response_model=TopicReadSingle)
-def update_topic(topic_id: UUID, topic_update: TopicUpdate, session: DBSession) -> TopicReadSingle:
-    db_topic = session.get(Topic, topic_id)
-    if db_topic is None:
+def update_topic(user: CurrentUser, topic_id: UUID, topic_update: TopicUpdate, session: DBSession) -> TopicReadSingle:
+    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one()
+    if topic is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
 
     # Update only provided fields
     topic_data = topic_update.model_dump(exclude_unset=True)
     for key, value in topic_data.items():
-        setattr(db_topic, key, value)
+        setattr(topic, key, value)
 
-    db_topic.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
-    session.add(db_topic)
+    topic.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
+    session.add(topic)
     session.commit()
-    session.refresh(db_topic)
-    return db_topic
+    session.refresh(topic)
+    return topic
+
+
+@router.delete("/{topic_id}", response_model=dict)
+def delete_topic(user: CurrentUser, topic_id: UUID, session: DBSession) -> dict:
+    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one()
+    if topic is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
+
+    # Delete the Topic
+    session.delete(topic)
+    session.commit()
+    return {"message": "Topic has been deleted"}
 
 
 @router.get("/{user_id}/topics", response_model=list[TopicReadList])

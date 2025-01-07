@@ -45,12 +45,12 @@ def read_course_topics(course_id: UUID, session: DBSession) -> list[TopicReadLis
 
 
 @router.put("/{course_id}/topics/{topic_id}", response_model=CourseReadSingle)
-def add_topic_to_course(course_id: UUID, topic_id: UUID, session: DBSession) -> list[TopicReadList]:
-    course = session.get(Course, course_id)
+def add_topic_to_course(user: CurrentUser, course_id: UUID, topic_id: UUID, session: DBSession) -> list[TopicReadList]:
+    course = session.exec(select(Course).where((Course.id == course_id) & (Course.creator_id == user.id))).one()
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
 
-    topic = session.get(Topic, topic_id)
+    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one()
     if topic is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
 
@@ -62,21 +62,35 @@ def add_topic_to_course(course_id: UUID, topic_id: UUID, session: DBSession) -> 
 
 
 @router.patch("/{course_id}", response_model=CourseReadSingle)
-def update_course(course_id: UUID, course_update: CourseUpdate, session: DBSession) -> CourseReadSingle:
-    db_course = session.get(Course, course_id)
-    if db_course is None:
+def update_course(
+    user: CurrentUser, course_id: UUID, course_update: CourseUpdate, session: DBSession
+) -> CourseReadSingle:
+    course = session.exec(select(Course).where((Course.id == course_id) & (Course.creator_id == user.id))).one()
+    if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
 
     # Update only provided fields
     course_data = course_update.model_dump(exclude_unset=True)
     for key, value in course_data.items():
-        setattr(db_course, key, value)
+        setattr(course, key, value)
 
-    db_course.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
-    session.add(db_course)
+    course.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
+    session.add(course)
     session.commit()
-    session.refresh(db_course)
-    return db_course
+    session.refresh(course)
+    return course
+
+
+@router.delete("/{course_id}", response_model=dict)
+def delete_course(user: CurrentUser, course_id: UUID, session: DBSession) -> dict:
+    course = session.exec(select(Course).where((Course.id == course_id) & (Course.creator_id == user.id))).one()
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+
+    # Delete the Course
+    session.delete(course)
+    session.commit()
+    return {"message": "Course has been deleted"}
 
 
 @router.get("/{user_id}/courses", response_model=list[CourseReadList])
