@@ -23,7 +23,6 @@ class CourseBase(SQLModel):
     name: str
     price: PositiveInt
     description: str
-    creator_id: UUID
 
 
 class Course(CourseBase, table=True):
@@ -56,6 +55,7 @@ class CourseReadList(CourseBase):
     """Model for reading multiple Course data."""
 
     id: UUID
+    creator_id: UUID
 
 
 class CourseReadSingle(CourseReadList):

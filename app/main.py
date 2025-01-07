@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 # from app.utils.migrations import apply_migrations
-from app.utils.middlewares import JWTMiddleware
 from app.routers import courses, topics
 from app.core.config import settings
 
@@ -16,8 +15,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan, debug=settings.debug)
-
-app.add_middleware(JWTMiddleware)
 
 app.include_router(courses.router, tags=["Courses"])
 app.include_router(topics.router, tags=["Topics"])
