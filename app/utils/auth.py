@@ -16,7 +16,7 @@ class User(SQLModel):
     id: UUID
     username: str
     email: str
-    full_name: str
+    full_name: str | None
 
 
 def authenticate(request: Request) -> User:
@@ -27,15 +27,15 @@ def authenticate(request: Request) -> User:
     if scheme.lower() != "bearer":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid scheme")
 
-    response = requests.post(TOKEN_VERIFY_URL, {"token": token})
+    response = requests.post(TOKEN_VERIFY_URL, json={"token": token})
     # Ensure the request was successful
-    print("* " * 20, response.text, sep="\n")
-    if response.status_code == 200:
+    if response.status_code == status.HTTP_200_OK:
         try:
             user_data = response.json()
             return User(**user_data)
         except JSONDecodeError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    raise HTTPException(status_code=response.status_code, detail="Authentication error")
 
 
 CurrentUser = Annotated[User, Depends(authenticate)]

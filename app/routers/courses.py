@@ -21,8 +21,7 @@ def list_courses(session: DBSession, offset: int = 0, limit: int = 100) -> list[
 
 @router.post("/", response_model=CourseReadSingle, status_code=status.HTTP_201_CREATED)
 def create_course(user: CurrentUser, course: CourseCreate, session: DBSession) -> CourseReadSingle:
-    course.creator_id = user.id
-    db_course = Course.model_validate(course)
+    db_course = Course.model_validate(course, update={"creator_id": user.id})
     session.add(db_course)
     session.commit()
     session.refresh(db_course)
