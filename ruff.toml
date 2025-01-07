@@ -5,7 +5,7 @@ target-version = "py312"
 line-length = 120
 indent-width = 4
 
-exclude = ["venv", "alembic"]
+exclude = ["venv", "alembic", "auth"]
 
 # [lint]
 # ignore = ["F821"]
