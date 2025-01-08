@@ -56,19 +56,24 @@ API server for Artadas project
    cd docker
    ```
 
-2. Build your containers:
+2. Update write permission on init script
+   ```bash
+   chmod a+w init-scripts/02_init-auth-db.sql
+   ```
+
+3. Build your containers:
    ```bash
    docker compose build
    ```
 
-3. Run containers:
+4. Run containers:
    ```bash
    docker compose up
    ```
 
-4. Access the API at [0.0.0.0:8000](http://0.0.0.0:8000).
+5. Access the API at [0.0.0.0:8000](http://0.0.0.0:8000).
 
-5. View the interactive API docs:
+6. View the interactive API docs:
    - Swagger UI: [0.0.0.0:8000/docs](http://0.0.0.0:8000/docs)
    - ReDoc: [0.0.0.0:8000/redoc](http://0.0.0.0:8000/redoc)
 
