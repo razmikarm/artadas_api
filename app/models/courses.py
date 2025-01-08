@@ -42,7 +42,9 @@ class Course(CourseBase, table=True):
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
 
-    topics: list["Topic"] = Relationship(back_populates="courses", link_model=Syllabus)
+    topics: list["Topic"] = Relationship(
+        back_populates="courses", link_model=Syllabus, sa_relationship_kwargs={"order_by": "Syllabus.sequence"}
+    )
 
 
 class CourseCreate(CourseBase):

@@ -45,7 +45,7 @@ def read_course_topics(course_id: UUID, session: DBSession) -> list[TopicReadLis
 
 
 @router.put("/{course_id}/topics/{topic_id}", response_model=CourseReadSingle)
-def add_topic_to_course(user: CurrentUser, course_id: UUID, topic_id: UUID, session: DBSession) -> list[TopicReadList]:
+def add_topic_to_course(user: CurrentUser, course_id: UUID, topic_id: UUID, session: DBSession) -> CourseReadSingle:
     course = session.exec(select(Course).where((Course.id == course_id) & (Course.creator_id == user.id))).one()
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")

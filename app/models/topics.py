@@ -27,7 +27,6 @@ class TopicBase(SQLModel):
 
     title: str
     content: str
-    creator_id: UUID
 
 
 class Topic(TopicBase, table=True):
@@ -59,6 +58,7 @@ class TopicReadList(TopicBase):
     """Model for reading multiple Topic data."""
 
     id: UUID
+    creator_id: UUID
 
 
 class TopicReadSingle(TopicReadList):
