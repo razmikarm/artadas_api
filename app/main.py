@@ -2,13 +2,14 @@ import logging
 import multiprocessing
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from app.utils.middleware import LoggingMiddleware
 
 from app.utils.migrations import apply_migrations
 from app.routers import courses, topics
 from app.core.config import settings
 
 log = logging.getLogger("uvicorn")
-logging.basicConfig(level=logging.INFO)
+log.setLevel(logging.DEBUG if settings.debug else logging.INFO)
 
 
 @asynccontextmanager
@@ -29,3 +30,6 @@ app = FastAPI(lifespan=lifespan, debug=settings.debug, docs_url=None, redoc_url=
 
 app.include_router(courses.router, tags=["Courses"])
 app.include_router(topics.router, tags=["Topics"])
+
+if settings.debug:
+    app.add_middleware(LoggingMiddleware)
