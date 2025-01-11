@@ -1,9 +1,10 @@
-from typing import Annotated, TYPE_CHECKING
 from uuid import UUID, uuid4
-from datetime import datetime, UTC
-
 from pydantic import ConfigDict
-from sqlmodel import SQLModel, Field, Relationship, func
+from datetime import datetime, UTC
+from typing import Annotated, TYPE_CHECKING
+from sqlmodel import SQLModel, Field, Relationship, func, select
+
+from app.db.database import Session
 from app.models.topics import Syllabus
 
 
@@ -13,6 +14,15 @@ if TYPE_CHECKING:
     from app.models.topics import Topic
 
 PositiveInt = Annotated[int, Field(gt=-1)]
+
+
+class Participation(SQLModel, table=True):
+    course_id: UUID = Field(foreign_key="course.id", primary_key=True)
+    student_id: UUID = Field(primary_key=True)
+
+    # courses: list["Course"] = Relationship(
+    #     back_populates="participations"
+    # )
 
 
 class CourseBase(SQLModel):
@@ -45,6 +55,15 @@ class Course(CourseBase, table=True):
     topics: list["Topic"] = Relationship(
         back_populates="courses", link_model=Syllabus, sa_relationship_kwargs={"order_by": "Syllabus.sequence"}
     )
+
+    # participations: list["Participation"] = Relationship(
+    #     back_populates="courses", link_model=Participation, sa_relationship_kwargs={"cascade": "all, delete-orphan"}
+    # )
+
+    def get_students_ids(self, session: Session) -> list[UUID]:
+        statement = select(Participation.student_id).where(Participation.course_id == self.id)
+        results = session.exec(statement)
+        return results.all()
 
 
 class CourseCreate(CourseBase):

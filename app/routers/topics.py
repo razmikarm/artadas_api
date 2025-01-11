@@ -36,7 +36,7 @@ def read_topic(topic_id: UUID, session: DBSession) -> TopicReadSingle:
 
 @router.patch("/{topic_id}", response_model=TopicReadSingle)
 def update_topic(user: CurrentUser, topic_id: UUID, topic_update: TopicUpdate, session: DBSession) -> TopicReadSingle:
-    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one()
+    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one_or_none()
     if topic is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
 
@@ -54,7 +54,7 @@ def update_topic(user: CurrentUser, topic_id: UUID, topic_update: TopicUpdate, s
 
 @router.delete("/{topic_id}", response_model=dict)
 def delete_topic(user: CurrentUser, topic_id: UUID, session: DBSession) -> dict:
-    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one()
+    topic = session.exec(select(Topic).where((Topic.id == topic_id) & (Topic.creator_id == user.id))).one_or_none()
     if topic is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Topic not found")
 

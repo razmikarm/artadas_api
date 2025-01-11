@@ -1,22 +1,14 @@
 import requests
-from uuid import UUID
 from typing import Annotated
-from sqlmodel import SQLModel
 from json import JSONDecodeError
 from fastapi import Request, HTTPException, status, Depends
 
+from app.models.users import User
 from app.core.config import settings
 
 
 AUTH_BASE_URL = settings.auth_base_url
 TOKEN_VERIFY_URL = f"{AUTH_BASE_URL}/auth/verify/"
-
-
-class User(SQLModel):
-    id: UUID
-    username: str
-    email: str
-    full_name: str | None
 
 
 def authenticate(request: Request) -> User:
