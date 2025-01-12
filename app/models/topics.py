@@ -68,7 +68,7 @@ class Topic(TopicBase, table=True):
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
     )
-    last_updated_at: datetime = Field(
+    updated_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
         nullable=False,
         sa_column_kwargs={"server_default": func.current_timestamp()},
@@ -93,7 +93,7 @@ class TopicReadList(TopicBase):
 class TopicReadSingle(TopicReadList):
     """Model for reading single Topic data."""
 
-    last_updated_at: datetime
+    updated_at: datetime
     created_at: datetime
 
 

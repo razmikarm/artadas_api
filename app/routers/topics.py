@@ -57,7 +57,7 @@ def update_topic(user: CurrentUser, topic_id: UUID, topic_update: TopicUpdate, s
     for key, value in topic_data.items():
         setattr(topic, key, value)
 
-    topic.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
+    topic.updated_at = datetime.now(UTC).replace(tzinfo=None)
     session.add(topic)
     session.commit()
     session.refresh(topic)

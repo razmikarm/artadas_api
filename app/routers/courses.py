@@ -172,7 +172,7 @@ def update_course(
     for key, value in course_data.items():
         setattr(course, key, value)
 
-    course.last_updated_at = datetime.now(UTC).replace(tzinfo=None)
+    course.updated_at = datetime.now(UTC).replace(tzinfo=None)
     session.add(course)
     session.commit()
     session.refresh(course)
