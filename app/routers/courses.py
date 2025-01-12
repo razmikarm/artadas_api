@@ -135,7 +135,7 @@ def read_course_students_ids(user: CurrentUser, course_id: UUID, session: DBSess
 
 
 @router.post("/{course_id}/join", response_model=CourseReadSingle)
-def jon_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> CourseReadSingle:
+def join_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> CourseReadSingle:
     course = session.exec(select(Course).where((Course.id == course_id) & (Course.creator_id != user.id))).one_or_none()
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
@@ -144,6 +144,19 @@ def jon_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> Co
     session.add(participation)
     session.commit()
     return course
+
+
+@router.post("/{course_id}/leave", response_model=dict)
+def leave_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> dict:
+    participation = session.exec(
+        select(Participation).where((Participation.course_id == course_id) & (Participation.student_id == user.id))
+    ).one_or_none()
+    if participation is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+
+    session.delete(participation)
+    session.commit()
+    return {"messagge": "Successfully left the course"}
 
 
 @router.patch("/{course_id}", response_model=CourseReadSingle)
