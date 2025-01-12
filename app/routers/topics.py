@@ -26,6 +26,18 @@ def create_topic(user: CurrentUser, topic: TopicCreate, session: DBSession) -> T
     return db_topic
 
 
+@router.get("/by/me", response_model=list[TopicReadList])
+def read_current_user_topics(user: CurrentUser, session: DBSession):
+    user_courses = session.exec(select(Topic).where(Topic.creator_id == user.id)).all()
+    return user_courses
+
+
+# @router.get("/by/{user_id}", response_model=list[TopicReadList])
+# def read_given_user_topics(user_id: UUID, session: DBSession):
+#     user_courses = session.exec(select(Topic).where(Topic.creator_id == user_id)).all()
+#     return user_courses
+
+
 @router.get("/{topic_id}", response_model=TopicReadSingle)
 def read_topic(topic_id: UUID, session: DBSession) -> TopicReadSingle:
     topic = session.get(Topic, topic_id)
@@ -62,9 +74,3 @@ def delete_topic(user: CurrentUser, topic_id: UUID, session: DBSession) -> dict:
     session.delete(topic)
     session.commit()
     return {"message": "Topic has been deleted"}
-
-
-@router.get("/{user_id}/topics", response_model=list[TopicReadList])
-def read_user_topics(user_id: UUID, session: DBSession):
-    user_courses = session.exec(select(Topic).where(Topic.creator_id == user_id)).all()
-    return user_courses

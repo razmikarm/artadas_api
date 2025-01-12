@@ -1,10 +1,11 @@
 from typing import Annotated, TYPE_CHECKING
 from uuid import UUID, uuid4
 from datetime import datetime, UTC
-
+from operator import add, sub
 from pydantic import ConfigDict
-from sqlmodel import SQLModel, Field, Relationship, func
+from sqlmodel import SQLModel, Field, Relationship, func, select, update
 
+from app.db.database import Session
 
 # Import only for type checking
 # Avoids forward references
@@ -18,6 +19,34 @@ class Syllabus(SQLModel, table=True):
     course_id: UUID = Field(foreign_key="course.id", primary_key=True)
     topic_id: UUID = Field(foreign_key="topic.id", primary_key=True)
     sequence: PositiveInt
+
+    @classmethod
+    def change_topic_position(cls, course_id: UUID, topic_id: UUID, new_pos: int, session: Session):
+        syllabus = session.exec(
+            select(cls).where((cls.topic_id == topic_id) & (cls.course_id == course_id))
+        ).one_or_none()
+        curr_pos = syllabus.sequence
+        if new_pos > curr_pos:
+            op = sub
+            lower_pos, upper_pos = curr_pos + 1, new_pos
+        elif new_pos < curr_pos:
+            op = add
+            lower_pos, upper_pos = new_pos, curr_pos - 1
+        else:
+            return
+
+        stmt = (
+            update(cls)
+            .where((cls.course_id == course_id) & (cls.sequence.between(lower_pos, upper_pos)))
+            .values(sequence=op(cls.sequence, 1))
+        )
+        session.exec(stmt)
+        syllabus.sequence = new_pos
+        session.commit()
+
+    @classmethod
+    def get_topic_count(cls, course_id: UUID, session: Session) -> int:
+        return session.exec(select(func.count()).where(cls.course_id == course_id)).one_or_none()
 
 
 class TopicBase(SQLModel):
