@@ -19,7 +19,10 @@ API server for Artadas project
    cd artadas_api
    ```
 
-2. Rename `.env.example` to `.env` and fill real data 
+2. Rename `.env.example` to `.env` and fill real data (also for `auth` submodule)
+   ```bash
+   cp .env.example .env
+   ```
 
 ### Local Installation and Run
 
