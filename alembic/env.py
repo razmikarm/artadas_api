@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
 # Load your models here
-from app.models.courses import Course, Participation
+from app.models.courses import Course, CourseParticipation
 from app.models.topics import Topic, Syllabus
 
 

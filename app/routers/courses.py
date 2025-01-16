@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 from app.db.database import DBSession
 from app.models.topics import TopicReadList, Topic, Syllabus
-from app.models.courses import CourseCreate, Course, CourseReadSingle, CourseUpdate, CourseReadList, Participation
+from app.models.courses import CourseCreate, Course, CourseReadSingle, CourseUpdate, CourseReadList, CourseParticipation
 
 from app.utils.auth import CurrentUser
 
@@ -140,21 +140,23 @@ def join_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> C
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
 
-    participation = Participation(course_id=course_id, student_id=user.id)
-    session.add(participation)
+    c_participation = CourseParticipation(course_id=course_id, student_id=user.id)
+    session.add(c_participation)
     session.commit()
     return course
 
 
 @router.post("/{course_id}/leave", response_model=dict)
 def leave_the_course(user: CurrentUser, course_id: UUID, session: DBSession) -> dict:
-    participation = session.exec(
-        select(Participation).where((Participation.course_id == course_id) & (Participation.student_id == user.id))
+    c_participation = session.exec(
+        select(CourseParticipation).where(
+            (CourseParticipation.course_id == course_id) & (CourseParticipation.student_id == user.id)
+        )
     ).one_or_none()
-    if participation is None:
+    if c_participation is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
 
-    session.delete(participation)
+    session.delete(c_participation)
     session.commit()
     return {"messagge": "Successfully left the course"}
 
