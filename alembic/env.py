@@ -9,6 +9,8 @@ from sqlmodel import SQLModel
 # Load your models here
 from app.models.courses import Course, CourseParticipation
 from app.models.topics import Topic, Syllabus
+from app.models.trainings import Training, TrainingParticipation
+from app.models.schedulers import Scheduler
 
 
 # Load environment variables from .env file
