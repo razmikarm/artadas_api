@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from app.utils.middleware import LoggingMiddleware
 
 from app.utils.migrations import apply_migrations
-from app.routers import courses, topics
+from app.routers import courses, topics, trainings
 from app.core.config import settings
 
 log = logging.getLogger("uvicorn")
@@ -28,8 +28,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, debug=settings.debug, docs_url=None, redoc_url=None)
 
-app.include_router(courses.router, tags=["Courses"])
 app.include_router(topics.router, tags=["Topics"])
+app.include_router(courses.router, tags=["Courses"])
+app.include_router(trainings.router, tags=["Trainings"])
 
 if settings.debug:
     app.add_middleware(LoggingMiddleware)
