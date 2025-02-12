@@ -13,7 +13,7 @@ if len(sys.argv) != 2:
     exit("Usage: python set_webhook.py [Ngrok URL]")
 
 
-NGROK_URL = sys.argv[1]
+NGROK_URL = sys.argv[1].strip("/")
 
 requests.post(f"https://api.telegram.org/bot{TG_BOT_TOKEN}/setWebhook", params={"url": f"{NGROK_URL}/webhook"})
 
