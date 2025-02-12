@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     auth_base_url: str
 
+    TG_BOT_TOKEN: str
+
     @property
     def database_url(self) -> str:
         return (

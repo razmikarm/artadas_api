@@ -85,6 +85,26 @@ API server for Artadas project
 
 ## Development
 
+### Set ngrok URL for bot webhook
+
+1. Install and run [ngrok](https://ngrok.com/downloads/linux):
+   ```bash
+   ngrok http 8000
+   ```
+
+2. Copy Forwarding domain from ngrok output:
+   ```yaml
+   Example: https://bfe8-2a00-f3c-f4eb-0-888a-4341-e26c-7d1c.ngrok-free.app
+   ```
+
+2. Set it as a webhook URL:
+   ```bash
+   python set_webhook.py [ngrok_url]
+   ```
+   ```yaml
+   Example: python set_webhook.py https://bfe8-2a00-f3c-f4eb-0-888a-4341-e26c-7d1c.ngrok-free.app
+   ```
+
 ### Add pre-commits
 
 1. Install Pre-Commit Hooks:
@@ -175,6 +195,5 @@ API server for Artadas project
 ---
 
 ### Future Enhancements
-- Add authentication using OAuth2 or JWT.
-- Integrate Alembic for database migrations.
+- Integrate tests
 - Deploy to a cloud provider like AWS, GCP, or Heroku.

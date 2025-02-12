@@ -1,12 +1,14 @@
 import logging
 import multiprocessing
 from fastapi import FastAPI
+from aiogram.types import Update
 from contextlib import asynccontextmanager
 from app.utils.middleware import LoggingMiddleware
 
 from app.utils.migrations import apply_migrations
 from app.routers import courses, topics, trainings
 from app.core.config import settings
+from tg_bot.bot import bot, dp
 
 log = logging.getLogger("uvicorn")
 log.setLevel(logging.DEBUG if settings.debug else logging.INFO)
@@ -28,9 +30,21 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, debug=settings.debug, docs_url=None, redoc_url=None)
 
-app.include_router(topics.router, tags=["Topics"])
-app.include_router(courses.router, tags=["Courses"])
-app.include_router(trainings.router, tags=["Trainings"])
+app.include_router(topics.router, prefix="/api", tags=["Topics"])
+app.include_router(courses.router, prefix="/api", tags=["Courses"])
+app.include_router(trainings.router, prefix="/api", tags=["Trainings"])
+
+
+@app.post("/webhook")
+async def telegram_webhook(update: dict):
+    try:
+        telegram_update = Update.model_validate(update)
+        await dp.feed_update(bot, telegram_update)
+    except Exception as e:
+        # Log the error
+        print(f"Error processing update: {e}")
+    return {"status": "ok"}
+
 
 if settings.debug:
     app.add_middleware(LoggingMiddleware)
