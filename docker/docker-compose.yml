@@ -22,10 +22,26 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     volumes:
       - ..:/app  # Mount the local directory to the container's /app directory
     networks:
       - backend
+      - scheduler
+
+  celery_worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: artadas_celery_worker
+    command: celery -A scheduler.celery_worker.celery_app worker --loglevel=info
+    depends_on:
+      - redis
+      - api
+    volumes:
+      - ..:/app  # Mount the local directory to the container's /app directory
+    networks:
+      - scheduler
 
   auth:
     build: ../auth/
@@ -41,9 +57,19 @@ services:
     networks:
       - backend
 
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - scheduler
+
 volumes:
   postgres_data:
 
 networks:
   backend:
+    driver: bridge
+  scheduler:
     driver: bridge

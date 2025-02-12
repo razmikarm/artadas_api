@@ -13,8 +13,6 @@ class Settings(BaseSettings):
 
     auth_base_url: str
 
-    TG_BOT_TOKEN: str
-
     @property
     def database_url(self) -> str:
         return (
@@ -25,6 +23,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 settings = Settings()

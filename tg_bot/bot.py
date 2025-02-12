@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher
 
-from app.core.config import settings
+from tg_bot.config import settings
 
 from tg_bot.handlers import router
 
