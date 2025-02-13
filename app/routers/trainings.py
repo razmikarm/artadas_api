@@ -3,7 +3,6 @@ from datetime import datetime, UTC
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 
-from scheduler.tasks import create_group_topic
 from app.db.database import DBSession
 from app.models.schedulers import Scheduler, SchedulerCreate
 from app.utils.auth import CurrentUser
@@ -31,7 +30,6 @@ def create_training(user: CurrentUser, training: TrainingCreate, session: DBSess
     session.add(db_training)
     session.commit()
     session.refresh(db_training)
-    create_group_topic.delay(db_training.name, user.username)
     return db_training
 
 

@@ -1,6 +1,7 @@
 from uuid import UUID
 from datetime import datetime, UTC
 
+from scheduler.tasks import create_group_topic
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 from app.db.database import DBSession
@@ -24,6 +25,8 @@ def create_course(user: CurrentUser, course: CourseCreate, session: DBSession) -
     session.add(db_course)
     session.commit()
     session.refresh(db_course)
+    if db_course.price == 0:
+        create_group_topic.delay(db_course.name, user.username)
     return db_course
 
 
