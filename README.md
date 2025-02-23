@@ -53,6 +53,7 @@ API server for Artadas project
 ### Run with Docker
 
 > Before running any docker command navigate to `docker` directory
+> Make sure you have SSL certificates in `nginx/certs` directory 
 
 1. Navigate to `docker` directory
    ```bash
