@@ -65,6 +65,17 @@ services:
       - ngrok
       - backend
 
+  tma:
+    build:
+      context: ../tg_bot/tma
+    container_name: tma
+    ports:
+      - "3000:3000"
+    env_file:
+      - ../tg_bot/tma/.env.local
+    networks:
+      - backend
+
   ngrok:
     image: wernight/ngrok
     container_name: ngrok
