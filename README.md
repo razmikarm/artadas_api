@@ -128,15 +128,15 @@ API server for Artadas project
    alembic upgrade head
    ```
 
-### Update submodule (`auth`)
+### Update submodule
 
 1. When main repository detects that the submodule's commit reference has changed
    ```bash
-   git add auth
-   git commit -m "Updated Auth to the latest version"
+   git add <auth or tg_bot>
+   git commit -m "Updated <Auth or TG_Bot> submodule to the latest version"
    ```
 
-2. Update sumbodule to the latest commit that repository references
+2. Update submodules to the latest commit that repositories references
    ```bash
    git submodule update --remote
    ```
