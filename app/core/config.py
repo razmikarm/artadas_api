@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     postgres_port: str
     postgres_db: str
 
-    auth_base_url: str
+    AUTH_URL: str
+    REDIS_URL: str
+    INTERNAL_API_KEY: str
 
     @property
     def database_url(self) -> str:
