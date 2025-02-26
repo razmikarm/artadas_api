@@ -11,8 +11,9 @@ class Settings(BaseSettings):
     postgres_port: str
     postgres_db: str
 
-    AUTH_URL: str
     REDIS_URL: str
+    AUTH_WS_URL: str
+    WS_POOL_SIZE: int
     INTERNAL_API_KEY: str
 
     @property

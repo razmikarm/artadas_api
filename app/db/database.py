@@ -7,7 +7,12 @@ from app.core.config import settings
 
 
 # Create database engine
-engine = create_engine(settings.database_url)
+engine = create_engine(
+    settings.database_url,
+    pool_size=20,  # Increase the base pool size
+    max_overflow=40,  # Allow extra connections if needed
+    pool_timeout=30,  # Time to wait before raising TimeoutError
+)
 
 
 # Dependency to get a database session
